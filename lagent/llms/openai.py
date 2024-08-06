@@ -426,6 +426,9 @@ class GPTAPI(BaseAPIModel):
                 "parameters": {**gen_params},
             }
         elif model_type.lower().startswith("deepseek"):
+            gen_params.pop("session_id", None)
+            if "frequency_penalty" in gen_params:
+                gen_params["repetition_penalty"] = gen_params.pop("frequency_penalty")
             data = {"model": model_type, "messages": messages, **gen_params}
         else:
             raise NotImplementedError(f"Model type {model_type} is not supported")
